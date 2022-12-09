@@ -128,7 +128,7 @@
         ctx.strokeStyle = blindid.value;
         ctx.lineWidth = 50;
         ctx.stroke();
-      }
+      };
 
       ctx.beginPath();
       ctx.strokeStyle = backgroundline.value;
@@ -144,7 +144,7 @@
       ctx.textBaseline = "middle";
       ctx.fillText(title_text.value, canvas.width / 2, canvas.height / 2)
       ctx.strokeText(title_text.value, canvas.width / 2, canvas.height / 2);
-    }
+    };
     
     const download = () => {
       const dl_img = document.getElementById("canvas").toDataURL(`image/${file_format.value}`);
