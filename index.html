@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style>
+    @font-face {
+      font-family: 'komorebi';
+      src: url('asset/komorebi-gothic.ttf');
+    }
+
+    .createbutton {
+      position: relative;
+      margin: auto;
+      background-color: #00fa9a;
+      border: solid 3px #a8bf93;
+      width: 100%;
+      font-size: 32px;
+      border-radius: 30px;
+    }
+
+    .setting {
+      position: relative;
+      width: 100%;
+    }
+
+    .setting label {
+      position: relative;
+      display: block;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .setting_label {
+      position: relative;
+      display: block;
+      margin: 0 auto;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <select id="file_format">
+      <option value="png">PNG</option>
+      <option value="jpeg">JPEG</option>
+      <option value="webp">WEBP</option>
+    </select>
+    <button onclick="download()">DOWNLOAD</button>
+  </div>
+  <canvas id="canvas" style="width:100%"></canvas>
+  <button onclick="createheader()" class="createbutton">作成</button>
+  <br>
+
+  <table class="setting">
+    <tr>
+      <td>
+        <label>
+          <p>背景</p>
+          <input type="color" id="colorid">
+        </label>
+      </td>
+      <td>
+        <label>
+          <p>ブラインド</p>
+          <input type="color" id="blindid">
+        </label>
+      </td>
+      <td>
+        <label>
+          <p>背景外線</p>
+          <input type="color" id="backgroundline">
+        </label>
+      </td>
+    </tr>
+  </table>
+  <label class="setting_label">
+    <p>タイトル</p>
+    <input type="text" id="title_text" placeholder="タイトル">
+  </label>
+  <label class="setting_label">
+    <p>フォントサイズ</p>
+  <input type="range" min="30" max="250" value="200" id="title_text_fontsize" onchange="title_text_fontsize_number.value=title_text_fontsize.value">
+  <input type="number" id="title_text_fontsize_number" onchange="title_text_fontsize.value=title_text_fontsize_number.value" min="30" max="250">
+  </label>
+  
+  <table class="setting">
+    <tr>
+      <td>
+        <label>
+          <p>文字色</p>
+  <input type="color" id="title_text_fillStyle">
+        </label>
+      </td>
+      <td>
+        <label>
+          <p>文字線色</p>
+  <input type="color" id="title_text_strokeText">
+        </label>
+      </td>
+    </tr>
+  </table>
+  
+  
+  
+  <script>
+    //初期処理
+    const canvas = document.querySelector("#canvas");
+    canvas.width = 1500;
+    canvas.height = 500;
+    const ctx = canvas.getContext("2d");
+
+    const createheader = () => {
+
+      //背景色
+      ctx.beginPath();
+      ctx.fillStyle = colorid.value;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      //斜めブラインド
+      for (let i = 0; i < 14; i++) {
+        ctx.beginPath();
+        ctx.moveTo(2100 - i * 150, -50);
+        ctx.lineTo(1500 - i * 150, 550);
+        ctx.strokeStyle = blindid.value;
+        ctx.lineWidth = 50;
+        ctx.stroke();
+      }
+
+      ctx.beginPath();
+      ctx.strokeStyle = backgroundline.value;
+      ctx.lineWidth = 80;
+      ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+      //テキストの生成
+      ctx.font = `${title_text_fontsize.value}pt komorebi`;
+      ctx.lineWidth = 5;
+      ctx.fillStyle = title_text_fillStyle.value;
+      ctx.strokeStyle = title_text_strokeText.value;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(title_text.value, canvas.width / 2, canvas.height / 2)
+      ctx.strokeText(title_text.value, canvas.width / 2, canvas.height / 2);
+    }
+    
+    const download = () => {
+      const dl_img = document.getElementById("canvas").toDataURL(`image/${file_format.value}`);
+      const a = document.createElement("a");
+      a.download = Date.now().toString(36);
+      a.href = dl_img;
+      a.click();
+    }
+  </script>
+</body>
+
+</html>
